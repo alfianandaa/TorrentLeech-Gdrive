@@ -126,7 +126,7 @@ async def upload_to_tg(
 
 async def upload_to_gdrive(file_upload, message):
     await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
-    await message.edit_text("🔊 Now Uploading to ☁️ cloud...")
+    await message.edit_text("Uploading...")
     subprocess.Popen(('touch', 'rclone.conf'), stdout = subprocess.PIPE)
     with open('rclone.conf', 'a', newline="\n") as fole:
         fole.write("[DRIVE]\n")
@@ -149,11 +149,11 @@ async def upload_to_gdrive(file_upload, message):
         gauti = f"https://drive.google.com/file/d/{p}/view?usp=drivesdk"
         gau_link = re.search("(?P<url>https?://[^\s]+)", gauti).group("url")
         print(gau_link)
-        indexurl = f"{INDEX_LINK}/{file_upload}"
+        indexurl = f"{INDEX_LINK}"
         tam_link = requote_uri(indexurl)
         #s_tr = '-'*40
         await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
-        await message.edit_text(f"""🤖: {file_upload} has been Uploaded successfully to your cloud 🤒\n\n☁️ Cloud URL:  <a href="{gau_link}">FileLink</a>\nℹ️ Direct URL:  <a href="{tam_link}">IndexLink</a>""")
+        await message.edit_text(f"""{file_upload}\nUploaded successfully..!!\n\nFile:  <a href="{gau_link}">Click here</a>\nFolder Link:  <a href="{tam_link}">Click here</a>""")
         os.remove(file_upload)
     else:
         tt= os.path.join(destination, file_upload)
@@ -179,7 +179,7 @@ async def upload_to_gdrive(file_upload, message):
         tam_link = requote_uri(indexurl)
         #s_tr = '-'*40
         await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
-        await message.edit_text(f"""🤖: Folder has been Uploaded successfully to {tt} in your cloud 🤒\n\n☁️ Cloud URL:  <a href="{gau_link}">FolderLink</a>\nℹ️ Index Url:. <a href="{tam_link}">IndexLink</a>""")
+        await message.edit_text(f"""Folder Uploaded successfully\n\nFile Link:  <a href="{gau_link}">Click here</a>\nFolder Link:. <a href="{tam_link}">Click here</a>""")
         shutil.rmtree(file_upload)
 
 #
