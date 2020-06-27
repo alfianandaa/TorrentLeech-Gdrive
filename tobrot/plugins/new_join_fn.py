@@ -38,7 +38,7 @@ async def help_message_f(client, message):
     #message_id = 99
     # display the /help
     
-    await message.reply_text("""Available Commands\n\n /help = to print this help \n\n /mirror = Reply To Message Link If You Want To Mirror Link Into Gdrive \n\n /ytdl = Reply To Message Link If You Want To Download YT Video To Upload To Telegram \n\n /tmirror = Reply To Message Link If You Want To Mirror Link And Upload To This Group\n\n Add-on : \n *archive | *unzip | *unrar | *untar""")
+    await message.reply_text("""Available Commands\n\n /help = to print this help \n\n /mirror = Reply To Message Link If You Want To Mirror Link Into Gdrive \n\n /ytdl = Reply To Message Link If You Want To Download YT Video To Upload To Telegram \n\n /mirrorup = Reply To Message Link If You Want To Mirror Link And Upload To This Group\n\n /tmirror = Reply To Any File If You Want To Mirror From Telegram And Upload To Gdrive \n\n Add-on : \n *archive | *unzip | *unrar | *untar""")
 
 
 
