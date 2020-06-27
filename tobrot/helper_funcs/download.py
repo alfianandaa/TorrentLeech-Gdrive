@@ -23,7 +23,7 @@ from pyrogram import Client, Filters
 from tobrot import (
     DOWNLOAD_LOCATION
 )
-from tobrot.helper_funcs.display_progress import progress_for_pyrogram
+from tobrot.helper_funcs.display_progress_g import progress_for_pyrogram_g
 from tobrot.helper_funcs.upload_to_tg import upload_to_gdrive
 from tobrot.helper_funcs.download_aria_p_n import call_apropriate_function_t
 from tobrot.helper_funcs.create_compressed_archive import unzip_me, unrar_me, untar_me
@@ -39,7 +39,7 @@ async def down_load_media_f(client, message):
         the_real_download_location = await client.download_media(
             message=message.reply_to_message,
             file_name=download_location,
-            progress=progress_for_pyrogram,
+            progress=progress_for_pyrogram_g,
             progress_args=(
                 "trying to download", mess_age, c_time
             )
