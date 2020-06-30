@@ -22,6 +22,8 @@ help_string = f'''
 /stats: Show Stats of the machine the bot is hosted on
 
 /ping: Test Ping 
+
+/getsize: to check the size of this bot destination folder on gdrive
 '''
 
 async def help_bot_message(client, message):

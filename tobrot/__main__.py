@@ -30,6 +30,7 @@ from pyrogram import Client, Filters, MessageHandler, CallbackQueryHandler
 from tobrot.plugins.new_join_fn import new_join_f, help_message_f, rename_message_f
 from tobrot.plugins.stats import stats_bot_g
 from tobrot.plugins.stats import ping_bot_g
+from tobrot.plugins.stats import check_size_g
 from tobrot.plugins.help_bot import help_bot_message
 from tobrot.plugins.incoming_message_fn import incoming_message_f, incoming_youtube_dl_f, incoming_purge_message_f, incoming_gdrive_message_f
 from tobrot.plugins.status_message_fn import (
@@ -89,6 +90,12 @@ if __name__ == "__main__" :
         filters=Filters.command([f"ytdl"]) & Filters.chat(chats=AUTH_CHANNEL)
     )
     app.add_handler(incoming_youtube_dl_handler)
+    #
+    incoming_size_checker_handler = MessageHandler(
+        check_size_g,
+        filters=Filters.command(["getsize"]) & Filters.chat(chats=AUTH_CHANNEL)
+    )
+    app.add_handler(incoming_size_checker_handler)
     #
     incoming_bot_stats_handler = MessageHandler(
         stats_bot_g,
