@@ -18,6 +18,7 @@ import subprocess
 import re
 import requests
 import shutil
+from hurry.filesize import size
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
@@ -41,6 +42,12 @@ from pyrogram import (
     InputMediaAudio
 )
 
+#stackoverflow🤐
+
+def getFolderSize(p):
+    from functools import partial
+    prepend = partial(os.path.join, p)
+    return sum([(os.path.getsize(f) if os.path.isfile(f) else getFolderSize(f)) for f in map(prepend, os.listdir(p))])
 
 async def upload_to_tg(
     message,
@@ -153,9 +160,11 @@ async def upload_to_gdrive(file_upload, message, messa_ge, g_id):
         indexurl = f"{INDEX_LINK}/{file_upload}"
         tam_link = requests.utils.requote_uri(indexurl)
         #s_tr = '-'*40
+        gjay = size(os.path.getsize(file_upload))
+        print(gjay)
         end_time = int(round(time.time() * 1))
         m_s = (end_time - start_time)
-        await message.edit_text(f"""**Uploaded Successfully** __in {m_s}seconds__ \n\n<a href="{tam_link}">📄 {file_upload}</a>""")
+        await message.edit_text(f"""**Uploaded Successfully** __in {m_s}seconds__ \n\n<a href="{tam_link}">📄 {file_upload} </a>({gjay})""")
         os.remove(file_upload)
     else:
         tt= os.path.join(destination, file_upload)
@@ -179,10 +188,12 @@ async def upload_to_gdrive(file_upload, message, messa_ge, g_id):
         print(gau_link)
         indexurl = f"{INDEX_LINK}/{file_upload}/"
         tam_link = requests.utils.requote_uri(indexurl)
+        gjay = size(os.path.getsize(file_upload))
+        print(gjay)
         #s_tr = '-'*40
         end_time = int(round(time.time() * 1))
         m_s = (end_time - start_time)
-        await message.edit_text(f"""**Uploaded Successfully** __in {m_s}seconds__ \n\n<a href="{tam_link}">📁 {file_upload}</a>""")
+        await message.edit_text(f"""**Uploaded Successfully** __in {m_s}seconds__ \n\n<a href="{tam_link}">📁 {file_upload} </a>({gjay})""")
 
 #
 
