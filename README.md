@@ -108,10 +108,6 @@ and everythin except `[NAME]`
 
 ##### Optional Configuration Variables
 
-* `DOWNLOAD_LOCATION`
-
-* `MAX_FILE_SIZE`
-
 * `MAX_TIME_TO_WAIT_FOR_TORRENTS_TO_START`
 
 * `TG_OFFENSIVE_API`
