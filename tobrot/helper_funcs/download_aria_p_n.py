@@ -411,7 +411,7 @@ async def check_progress_for_dl(aria2, gid, event, previous_message):
 
                 # msg += f"\nStatus: {file.status}"
                 msg += f"\nETA: {file.eta_string()}"
-                msg += f"\nGID:<code>{gid}</code>"
+                msg += f"\nGID: <code>{gid}</code>"
                 # LOGGER.info(msg)
                 if msg != previous_message:
                     await event.edit(msg)
