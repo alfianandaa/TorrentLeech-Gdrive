@@ -1,4 +1,5 @@
 aiohttp
+psutil
 aria2p
 hachoir
 Pillow

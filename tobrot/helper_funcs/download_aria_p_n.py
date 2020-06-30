@@ -23,7 +23,6 @@ from tobrot import (
     MAX_TIME_TO_WAIT_FOR_TORRENTS_TO_START,
     AUTH_CHANNEL,
     DOWNLOAD_LOCATION,
-    EDIT_SLEEP_TIME_OUT,
     CUSTOM_FILE_NAME
 )
 
@@ -227,7 +226,7 @@ async def call_apropriate_function_g(
     cstom_file_name,
     is_unzip,
     is_unrar,
-    is_untar
+    is_untar,
 ):
     if incoming_link.lower().startswith("magnet:"):
         sagtus, err_message = add_magnet(aria_instance, incoming_link, c_file_name)
@@ -304,7 +303,7 @@ async def call_apropriate_function_g(
     user_id = sent_message_to_update_tg_p.reply_to_message.from_user.id
     final_response = await upload_to_gdrive(
         to_upload_file,
-        sent_message_to_update_tg_p
+        sent_message_to_update_tg_p,
     )
 #
 async def call_apropriate_function_t(
@@ -401,10 +400,9 @@ async def check_progress_for_dl(aria2, gid, event, previous_message):
                 except:
                     pass
                 #
-                msg = f"\nDownloading File: `{downloading_dir_name}`"
-                msg += f"\nSpeed: {file.download_speed_string()} 🔽 / {file.upload_speed_string()} 🔼"
+                msg = f"\nDownloading File: `{downloading_dir_name} | {file.total_length_string()}`"
+                msg += f"\nSpeed: {file.download_speed_string()}"
                 msg += f"\nProgress: {file.progress_string()}"
-                msg += f"\nTotal Size: {file.total_length_string()}"
 
                 if is_file is None :
                    msg += f"\n<b>Connections:</b> {file.connections}"
@@ -413,20 +411,20 @@ async def check_progress_for_dl(aria2, gid, event, previous_message):
 
                 # msg += f"\nStatus: {file.status}"
                 msg += f"\nETA: {file.eta_string()}"
-                msg += f"\n<code>/cancel {gid}</code>"
+                msg += f"\nGID:<code>{gid}</code>"
                 # LOGGER.info(msg)
                 if msg != previous_message:
                     await event.edit(msg)
                     previous_message = msg
             else:
                 msg = file.error_message
-                await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
+                await asyncio.sleep(5)
                 await event.edit(f"`{msg}`")
                 return False
-            await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
+            await asyncio.sleep(5)
             await check_progress_for_dl(aria2, gid, event, previous_message)
         else:
-            await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
+            await asyncio.sleep(5)
             await event.edit(f"File Downloaded Successfully: `{file.name}`")
             return True
     except Exception as e:

@@ -47,7 +47,6 @@ async def down_load_media_f(client, message):
         end_t = datetime.now()
         ms = (end_t - start_t).seconds
         print(the_real_download_location)
-        await asyncio.sleep(10)
         await mess_age.edit_text(f"Downloaded to <code>{the_real_download_location}</code> in <u>{ms}</u> seconds")
         gk = subprocess.Popen(['mv', f'{the_real_download_location}', '/app/'], stdout = subprocess.PIPE)
         out = gk.communicate()

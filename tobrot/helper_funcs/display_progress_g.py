@@ -15,7 +15,6 @@ import time
 from tobrot import (
     FINISHED_PROGRESS_STR,
     UN_FINISHED_PROGRESS_STR,
-    EDIT_SLEEP_TIME_OUT
 )
 
 

@@ -23,15 +23,14 @@ from tobrot import (
     APP_ID,
     API_HASH,
     AUTH_CHANNEL,
-    LEECH_COMMAND,
-    YTDL_COMMAND,
-    GLEECH_COMMAND,
-    TELEGRAM_LEECH_COMMAND_G
 )
 
 from pyrogram import Client, Filters, MessageHandler, CallbackQueryHandler
 
 from tobrot.plugins.new_join_fn import new_join_f, help_message_f, rename_message_f
+from tobrot.plugins.stats import stats_bot_g
+from tobrot.plugins.stats import ping_bot_g
+from tobrot.plugins.help_bot import help_bot_message
 from tobrot.plugins.incoming_message_fn import incoming_message_f, incoming_youtube_dl_f, incoming_purge_message_f, incoming_gdrive_message_f
 from tobrot.plugins.status_message_fn import (
     status_message_f,
@@ -63,19 +62,19 @@ if __name__ == "__main__" :
     #
     incoming_message_handler = MessageHandler(
         incoming_message_f,
-        filters=Filters.command([f"{LEECH_COMMAND}"]) & Filters.chat(chats=AUTH_CHANNEL)
+        filters=Filters.command([f"mirrorup"]) & Filters.chat(chats=AUTH_CHANNEL)
     )
     app.add_handler(incoming_message_handler)
     #
     incoming_gdrive_message_handler = MessageHandler(
         incoming_gdrive_message_f,
-        filters=Filters.command([f"{GLEECH_COMMAND}"]) & Filters.chat(chats=AUTH_CHANNEL)
+        filters=Filters.command([f"mirror"]) & Filters.chat(chats=AUTH_CHANNEL)
     )
     app.add_handler(incoming_gdrive_message_handler)
     #
     incoming_telegram_download_handler = MessageHandler(
         down_load_media_f,
-        filters=Filters.command([f"{TELEGRAM_LEECH_COMMAND_G}"]) & Filters.chat(chats=AUTH_CHANNEL)
+        filters=Filters.command([f"tmirror"]) & Filters.chat(chats=AUTH_CHANNEL)
     )
     app.add_handler(incoming_telegram_download_handler)
     #
@@ -87,9 +86,21 @@ if __name__ == "__main__" :
     #
     incoming_youtube_dl_handler = MessageHandler(
         incoming_youtube_dl_f,
-        filters=Filters.command([f"{YTDL_COMMAND}"]) & Filters.chat(chats=AUTH_CHANNEL)
+        filters=Filters.command([f"ytdl"]) & Filters.chat(chats=AUTH_CHANNEL)
     )
     app.add_handler(incoming_youtube_dl_handler)
+    #
+    incoming_bot_stats_handler = MessageHandler(
+        stats_bot_g,
+        filters=Filters.command(["stats"]) & Filters.chat(chats=AUTH_CHANNEL)
+    )
+    app.add_handler(incoming_bot_stats_handler)
+    #
+    ping_message_handler = MessageHandler(
+        ping_bot_g,
+        filters=Filters.command(["ping"]) & Filters.chat(chats=AUTH_CHANNEL)
+    )
+    app.add_handler(ping_message_handler)
     #
     status_message_handler = MessageHandler(
         status_message_f,
@@ -128,12 +139,18 @@ if __name__ == "__main__" :
         filters=Filters.command(["upload"]) & Filters.chat(chats=AUTH_CHANNEL)
     )
     app.add_handler(upload_document_handler)
-
+    #
     help_text_handler = MessageHandler(
         help_message_f,
-        filters=Filters.command(["help"]) & Filters.chat(chats=AUTH_CHANNEL)
+        filters=Filters.command(["start"]) & Filters.chat(chats=AUTH_CHANNEL)
     )
     app.add_handler(help_text_handler)
+    #
+    help_bot_text_handler = MessageHandler(
+        help_bot_message,
+        filters=Filters.command(["help"]) & Filters.chat(chats=AUTH_CHANNEL)
+    )
+    app.add_handler(help_bot_text_handler)
     #
     new_join_handler = MessageHandler(
         new_join_f,

@@ -29,7 +29,6 @@ from requests.utils import requote_uri
 
 from tobrot import (
     TG_MAX_FILE_SIZE,
-    EDIT_SLEEP_TIME_OUT,
     DOWNLOAD_LOCATION,
     DESTINATION_FOLDER,
     RCLONE_CONFIG,
@@ -89,8 +88,8 @@ async def upload_to_tg(
             d_f_s = humanbytes(os.path.getsize(local_file_name))
             i_m_s_g = await message.reply_text(
                 "Telegram does not support uploading this file.\n"
-                f"Detected File Size: {d_f_s} 😡\n"
-                "\n🤖 trying to split the files 🌝🌝🌚"
+                f"Detected File Size: {d_f_s} \n"
+                "\ntrying to split the files"
             )
             splitted_dir = await split_large_files(local_file_name)
             totlaa_sleif = os.listdir(splitted_dir)
@@ -99,7 +98,7 @@ async def upload_to_tg(
             LOGGER.info(totlaa_sleif)
             ba_se_file_name = os.path.basename(local_file_name)
             await i_m_s_g.edit_text(
-                f"Detected File Size: {d_f_s} 😡\n"
+                f"Detected File Size: {d_f_s} \n"
                 f"<code>{ba_se_file_name}</code> splitted into {number_of_files} files.\n"
                 "trying to upload to Telegram, now ..."
             )
@@ -126,7 +125,6 @@ async def upload_to_tg(
 #
 
 async def upload_to_gdrive(file_upload, message):
-    await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
     await message.edit_text("Uploading...")
     subprocess.Popen(('touch', 'rclone.conf'), stdout = subprocess.PIPE)
     with open('rclone.conf', 'a', newline="\n") as fole:
@@ -153,8 +151,7 @@ async def upload_to_gdrive(file_upload, message):
         indexurl = f"{INDEX_LINK}"
         tam_link = requests.utils.requote_uri(indexurl)
         #s_tr = '-'*40
-        await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
-        await message.edit_text(f"""{file_upload}\nUploaded successfully..!!\n\nFile:  <a href="{gau_link}">Click here</a>\nFolder Link:  <a href="{tam_link}">Click here</a>""")
+        await message.edit_text(f"""{file_upload}\nUploaded successfully..!!\n\nFile:  <a href="{gau_link}">Click here</a>\nIndex Link:  <a href="{tam_link}">Click here</a>""")
         os.remove(file_upload)
     else:
         tt= os.path.join(destination, file_upload)
@@ -176,18 +173,16 @@ async def upload_to_gdrive(file_upload, message):
         gautii = f"https://drive.google.com/folderview?id={p}"
         gau_link = re.search("(?P<url>https?://[^\s]+)", gautii).group("url")
         print(gau_link)
-        indexurl = f"{INDEX_LINK}/{file_upload}/"
+        indexurl = f"{INDEX_LINK}"
         tam_link = requests.utils.requote_uri(indexurl)
         #s_tr = '-'*40
-        await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
-        await message.edit_text(f"""Folder Uploaded successfully\n\nFile Link:  <a href="{gau_link}">Click here</a>\nFolder Link:. <a href="{tam_link}">Click here</a>""")
+        await message.edit_text(f"""Folder Uploaded successfully\n\nFile Link:  <a href="{gau_link}">Click here</a>\nIndex Link:. <a href="{tam_link}">Click here</a>""")
         shutil.rmtree(file_upload)
 
 #
 
 
 async def upload_single_file(message, local_file_name, caption_str, from_user, edit_media):
-    await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
     sent_message = None
     start_time = time.time()
     #
@@ -248,7 +243,6 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                 thumb = thumb_image_path
             # send video
             if edit_media and message.photo:
-                await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
                 sent_message = await message.edit_media(
                     media=InputMediaVideo(
                         media=local_file_name,
@@ -306,7 +300,6 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                 thumb = thumb_image_path
             # send audio
             if edit_media and message.photo:
-                await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
                 sent_message = await message.edit_media(
                     media=InputMediaAudio(
                         media=local_file_name,
