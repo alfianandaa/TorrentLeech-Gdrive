@@ -24,6 +24,8 @@ help_string = f'''
 /ping: Test Ping 
 
 /getsize: to check the size of this bot destination folder on gdrive
+
+/index: to get the index link where all files are stored
 '''
 
 async def help_bot_message(client, message):

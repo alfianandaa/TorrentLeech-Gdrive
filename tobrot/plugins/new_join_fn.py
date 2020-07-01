@@ -48,13 +48,13 @@ async def rename_message_f(client, message):
     inline_keyboard = []
     inline_keyboard.append([
         pyrogram.InlineKeyboardButton(
-            text="read this?",
-            url="https://t.me/alfiananda1"
+            text="Click here",
+            url="my.gdriveku.workers.dev"
         )
     ])
     reply_markup = pyrogram.InlineKeyboardMarkup(inline_keyboard)
     await message.reply_text(
-        "please use @renamebot",
+        "**Index Link**",
         quote=True,
         reply_markup=reply_markup
     )

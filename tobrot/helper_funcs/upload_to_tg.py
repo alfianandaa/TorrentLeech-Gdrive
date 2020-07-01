@@ -149,12 +149,12 @@ async def upload_to_gdrive(file_upload, message):
         gauti = f"https://drive.google.com/file/d/{p}/view?usp=drivesdk"
         gau_link = re.search("(?P<url>https?://[^\s]+)", gauti).group("url")
         print(gau_link)
-        indexurl = f"{INDEX_LINK}"
+        indexurl = f"{INDEX_LINK}/{file_upload}"
         tam_link = requests.utils.requote_uri(indexurl)
         #s_tr = '-'*40
         end_time = int(round(time.time() * 1))
         m_s = (end_time - start_time)
-        await message.edit_text(f"""**Uploaded Sucessfully** __in {m_s}seconds__ \n\n<a href="{gau_link}">📄 {file_upload}</a> \n<a href="{tam_link}">👥 Index Link</a>""")
+        await message.edit_text(f"""**Uploaded Sucessfully** __in {m_s}seconds__ \n\n<a href="{tam_link}">📄 {file_upload}</a>""")
         os.remove(file_upload)
     else:
         tt= os.path.join(destination, file_upload)
@@ -176,12 +176,12 @@ async def upload_to_gdrive(file_upload, message):
         gautii = f"https://drive.google.com/folderview?id={p}"
         gau_link = re.search("(?P<url>https?://[^\s]+)", gautii).group("url")
         print(gau_link)
-        indexurl = f"{INDEX_LINK}"
+        indexurl = f"{INDEX_LINK}/{file_upload}/"
         tam_link = requests.utils.requote_uri(indexurl)
+        #s_tr = '-'*40
         end_time = int(round(time.time() * 1))
         m_s = (end_time - start_time)
-        #s_tr = '-'*40
-        await message.edit_text(f"""**Uploaded Sucessfully** __in {m_s}seconds__ \n\n<a href="{gau_link}">📁 {file_upload}</a> \n<a href="{tam_link}">👥 Index Link</a>""")
+        await message.edit_text(f"""**Uploaded Sucessfully** __in {m_s}seconds__ \n\n<a href="{tam_link}">📁 {file_upload}</a>""")
 
 #
 
