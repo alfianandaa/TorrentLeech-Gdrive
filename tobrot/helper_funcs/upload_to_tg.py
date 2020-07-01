@@ -126,6 +126,7 @@ async def upload_to_tg(
 
 async def upload_to_gdrive(file_upload, message):
     await message.edit_text("Uploading...")
+    start_time = int(round(time.time() * 1))
     subprocess.Popen(('touch', 'rclone.conf'), stdout = subprocess.PIPE)
     with open('rclone.conf', 'a', newline="\n") as fole:
         fole.write("[DRIVE]\n")
@@ -151,7 +152,9 @@ async def upload_to_gdrive(file_upload, message):
         indexurl = f"{INDEX_LINK}"
         tam_link = requests.utils.requote_uri(indexurl)
         #s_tr = '-'*40
-        await message.edit_text(f"""{file_upload}\nUploaded successfully..!!\n\nFile:  <a href="{gau_link}">Click here</a>\nIndex Link:  <a href="{tam_link}">Click here</a>""")
+        end_time = int(round(time.time() * 1))
+        m_s = (end_time - start_time)
+        await message.edit_text(f"""**Uploaded Sucessfully** __in {m_s}seconds__ \n\n<a href="{gau_link}">📄 {file_upload}</a> \n<a href="{tam_link}">👥 Index Link</a>""")
         os.remove(file_upload)
     else:
         tt= os.path.join(destination, file_upload)
@@ -176,8 +179,7 @@ async def upload_to_gdrive(file_upload, message):
         indexurl = f"{INDEX_LINK}"
         tam_link = requests.utils.requote_uri(indexurl)
         #s_tr = '-'*40
-        await message.edit_text(f"""Folder Uploaded successfully\n\nFile Link:  <a href="{gau_link}">Click here</a>\nIndex Link:. <a href="{tam_link}">Click here</a>""")
-        shutil.rmtree(file_upload)
+        await message.edit_text(f"""**Uploaded Sucessfully** __in {m_s}seconds__ \n\n<a href="{gau_link}">📁 {file_upload}</a> \n<a href="{tam_link}">👥 Index Link</a>""")
 
 #
 
