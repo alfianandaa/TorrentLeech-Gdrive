@@ -178,6 +178,8 @@ async def upload_to_gdrive(file_upload, message):
         print(gau_link)
         indexurl = f"{INDEX_LINK}"
         tam_link = requests.utils.requote_uri(indexurl)
+        end_time = int(round(time.time() * 1))
+        m_s = (end_time - start_time)
         #s_tr = '-'*40
         await message.edit_text(f"""**Uploaded Sucessfully** __in {m_s}seconds__ \n\n<a href="{gau_link}">📁 {file_upload}</a> \n<a href="{tam_link}">👥 Index Link</a>""")
 
