@@ -15,7 +15,8 @@ import pyrogram
 
 
 from tobrot import (
-    AUTH_CHANNEL
+    AUTH_CHANNEL,
+    INDEX_LINK
 )
 
 
@@ -45,16 +46,4 @@ Type /help to get a list of available commands
 
 
 async def rename_message_f(client, message):
-    inline_keyboard = []
-    inline_keyboard.append([
-        pyrogram.InlineKeyboardButton(
-            text="Click here",
-            url="my.gdriveku.workers.dev"
-        )
-    ])
-    reply_markup = pyrogram.InlineKeyboardMarkup(inline_keyboard)
-    await message.reply_text(
-        "**Index Link**",
-        quote=True,
-        reply_markup=reply_markup
-    )
+    await message.reply_text(f"""Index Link: <a href="{INDEX_LINK}">Click here</a>""")

@@ -117,7 +117,9 @@ and everythin except `[NAME]`
 * `INDEX_LINK`: (Without `/` at last of the link, otherwise u will get error) During creating index, plz fill `Default Root ID` with the id of your `DESTINATION_FOLDER` after creating. Otherwise index will not work properly.
 ## Available Commands
 
-* `/ytdl`: This command should be used as reply to a [supported link](https://ytdl-org.github.io/youtube-dl/supportedsites.html)
+* `/ytdl`: This command should be used as reply to a [supported link](https://ytdl-org.github.io/youtube-dl/supportedsites.html) and upload to telegram
+
+* `/ytdl gdrive`: This command should be used as reply to a [supported link](https://ytdl-org.github.io/youtube-dl/supportedsites.html) and upload to gdrive
 
 * `/mirror`: This command should be used as reply to a magnetic link, a torrent link, or a direct link. And this will download the files from the given link or torrent and will upload to the drive using rclone.
 

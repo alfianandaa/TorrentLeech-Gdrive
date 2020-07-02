@@ -15,7 +15,7 @@ help_string = f'''
 
 /ytdl: Reply To message Link To Mirror through youtube-dl and Upload to Telegram
 
-/ytdl gdrive: Reply To message Link To Mirror through youtube-dl and Upload to Telegram
+/ytdl gdrive: Reply To message Link To Mirror through youtube-dl and Upload to GDrive
 
 /cancel (GID): Reply to the message by which the download was initiated and that download will be cancelled
 

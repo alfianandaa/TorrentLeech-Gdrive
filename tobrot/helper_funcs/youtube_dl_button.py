@@ -191,9 +191,7 @@ async def youtube_dl_call_back(bot, update):
                     print(e)
             final_response = await upload_to_gdrive(
                 gaut_am,
-                update.message,
-                update.message.reply_to_message,
-                user_id
+                update.message
             )
         else:
             final_response = await upload_to_tg(
