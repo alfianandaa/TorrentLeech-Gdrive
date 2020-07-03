@@ -46,4 +46,4 @@ Type /help to get a list of available commands
 
 
 async def rename_message_f(client, message):
-    await message.reply_text(f"""Index Link: <a href="{INDEX_LINK}">Click here</a>""")
+    await message.reply_text(f"""Index Link: <a href="{INDEX_LINK}/">Click here</a>""")
