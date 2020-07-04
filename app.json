@@ -48,6 +48,7 @@
     },
     "INDEX_LINK": {
       "description": "Enter your index link here...dont add '/' at the end of the link",
+      "value": ""
     },
     "RCLONE_CONFIG": {
       "description": "Enter your copied text from rclone config. Compulsory for /gleech as well as /tleech command ",
