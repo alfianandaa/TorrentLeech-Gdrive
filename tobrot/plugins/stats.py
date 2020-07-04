@@ -1,4 +1,4 @@
-# (c) Alfiananda84 
+# © ported from izzy12 by alfiananda84
 
 import shutil, psutil
 import time
