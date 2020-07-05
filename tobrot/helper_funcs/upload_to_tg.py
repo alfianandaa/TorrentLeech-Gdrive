@@ -124,7 +124,7 @@ async def upload_to_tg(
     return dict_contatining_uploaded_files
 #
 
-async def upload_to_gdrive(file_upload, message):
+async def upload_to_gdrive(file_upload, message, messa_ge, g_id):
     await asyncio.sleep(5)
     await message.edit_text("Uploading...")
     start_time = int(round(time.time() * 1))
