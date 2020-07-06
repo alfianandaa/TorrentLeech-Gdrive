@@ -143,7 +143,8 @@ async def incoming_gdrive_message_f(client, message):
             cf_name,
             is_unzip,
             is_unrar,
-            is_untar
+            is_untar,
+            message
         )
     else:
         await i_m_sefg.edit_text(
@@ -197,6 +198,6 @@ async def incoming_youtube_dl_f(client, message):
             )
     else:
         await i_m_sefg.edit_text(
-            "**Reply sar,reply to any message link. \nPlease read /help \n"
+            "Reply sar,reply to any message link. \nPlease read /help \n"
             f"<b>API Error</b>: {cf_name}"
         )
