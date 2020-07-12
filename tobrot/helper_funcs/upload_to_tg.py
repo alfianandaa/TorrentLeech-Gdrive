@@ -287,7 +287,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     thumb=thumb,
                     supports_streaming=True,
                     disable_notification=True,
-                    reply_to_message_id=message.reply_to_message.message_id,
+                    #reply_to_message_id=message.reply_to_message.message_id,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         "trying to upload",
@@ -340,7 +340,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     title=title,
                     thumb=thumb,
                     disable_notification=True,
-                    reply_to_message_id=message.reply_to_message.message_id,
+                    #reply_to_message_id=message.reply_to_message.message_id,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         "trying to upload",
@@ -380,7 +380,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     caption=caption_str,
                     parse_mode="html",
                     disable_notification=True,
-                    reply_to_message_id=message.reply_to_message.message_id,
+                    #reply_to_message_id=message.reply_to_message.message_id,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         "trying to upload",
