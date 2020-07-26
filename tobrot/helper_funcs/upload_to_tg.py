@@ -47,7 +47,10 @@ from pyrogram import (
 def getFolderSize(p):
     from functools import partial
     prepend = partial(os.path.join, p)
-    return sum([(os.path.getsize(f) if os.path.isfile(f) else getFolderSize(f)) for f in map(prepend, os.listdir(p))])
+    return sum(
+        os.path.getsize(f) if os.path.isfile(f) else getFolderSize(f)
+        for f in map(prepend, os.listdir(p))
+    )
 
 async def upload_to_tg(
     message,
@@ -74,7 +77,7 @@ async def upload_to_tg(
         # number_of_files = len(directory_contents)
         LOGGER.info(directory_contents)
         new_m_esg = message
-        if not message.photo:
+        if not new_m_esg.photo:
             new_m_esg = await message.reply_text(
                 "Found {} files".format(len(directory_contents)),
                 quote=True
@@ -292,8 +295,6 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                         start_time
                     )
                 )
-            if thumb is not None:
-                os.remove(thumb)
         elif local_file_name.upper().endswith(("MP3", "M4A", "M4B", "FLAC", "WAV")):
             metadata = extractMetadata(createParser(local_file_name))
             duration = 0
@@ -347,8 +348,6 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                         start_time
                     )
                 )
-            if thumb is not None:
-                os.remove(thumb)
         else:
             thumb_image_path = None
             if os.path.isfile(thumbnail_location):
@@ -389,8 +388,8 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                         start_time
                     )
                 )
-            if thumb is not None:
-                os.remove(thumb)
+        if thumb is not None:
+            os.remove(thumb)
     except Exception as e:
         await message_for_progress_display.edit_text("**FAILED**\n" + str(e))
     else:
