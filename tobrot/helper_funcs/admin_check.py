@@ -12,7 +12,4 @@ async def AdminCheck(client, chat_id, user_id):
         "administrator"
     ]
     # https://git.colinshark.de/PyroBot/PyroBot/src/branch/master/pyrobot/modules/admin.py#L69
-    if SELF.status not in admin_strings:
-        return False
-    else:
-        return True
+    return SELF.status in admin_strings
