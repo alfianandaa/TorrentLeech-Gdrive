@@ -3,19 +3,17 @@
 # (c) Shrimadhav U K
 
 # the logging things
-import logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-import math
-import os
-import time
-
 from tobrot import (
     FINISHED_PROGRESS_STR,
     UN_FINISHED_PROGRESS_STR
 )
+import time
+import math
+import logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 async def progress_for_pyrogram(
@@ -65,7 +63,7 @@ async def progress_for_pyrogram(
                         tmp
                     )
                 )
-        except:
+        except BaseException:
             pass
 
 

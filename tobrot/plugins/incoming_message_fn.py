@@ -3,6 +3,15 @@
 # (c) Shrimadhav U K | gautamajay52 | Akshay C
 
 # the logging things
+from tobrot.helper_funcs.admin_check import AdminCheck
+from tobrot.helper_funcs.youtube_dl_extractor import extract_youtube_dl_formats
+from tobrot.helper_funcs.download_aria_p_n import call_apropriate_function, call_apropriate_function_g, aria_start
+from tobrot.helper_funcs.extract_link_from_message import extract_link
+import time
+from tobrot import (
+    DOWNLOAD_LOCATION
+)
+import os
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -12,23 +21,6 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
 
-import os
-
-from tobrot import (
-    DOWNLOAD_LOCATION
-)
-
-
-import time
-import aria2p
-import asyncio
-from tobrot.helper_funcs.extract_link_from_message import extract_link
-from tobrot.helper_funcs.download_aria_p_n import call_apropriate_function, call_apropriate_function_g, aria_start
-from tobrot.helper_funcs.download_from_link import request_download
-from tobrot.helper_funcs.display_progress import progress_for_pyrogram
-from tobrot.helper_funcs.youtube_dl_extractor import extract_youtube_dl_formats
-from tobrot.helper_funcs.admin_check import AdminCheck
-        
 async def incoming_purge_message_f(client, message):
     """/purge command"""
     i_m_sefg2 = await message.reply_text("Purging...", quote=True)
@@ -39,6 +31,7 @@ async def incoming_purge_message_f(client, message):
         for download in downloads:
             LOGGER.info(download.remove(force=True))
     await i_m_sefg2.delete()
+
 
 async def incoming_message_f(client, message):
     """/leech command"""
@@ -98,6 +91,8 @@ async def incoming_message_f(client, message):
             f"<b>API Error</b>: {cf_name}"
         )
 #
+
+
 async def incoming_gdrive_message_f(client, message):
     """/gleech command"""
     i_m_sefg = await message.reply_text("processing", quote=True)
@@ -165,13 +160,15 @@ async def incoming_youtube_dl_f(client, message):
     LOGGER.info(dl_url)
     if len(message.command) > 1 and message.command[1] == "gdrive":
         with open('blame_my_knowledge.txt', 'w+') as gg:
-            gg.write("I am noob and don't know what to do that's why I have did this")
+            gg.write(
+                "I am noob and don't know what to do that's why I have did this")
     LOGGER.info(cf_name)
     if dl_url is not None:
         await i_m_sefg.edit_text("extracting links")
         current_user_id = message.from_user.id
         # create an unique directory
-        user_working_dir = os.path.join(DOWNLOAD_LOCATION, str(current_user_id))
+        user_working_dir = os.path.join(
+            DOWNLOAD_LOCATION, str(current_user_id))
         # create download directory, if not exist
         if not os.path.isdir(user_working_dir):
             os.makedirs(user_working_dir)

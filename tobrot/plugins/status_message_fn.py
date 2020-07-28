@@ -3,6 +3,15 @@
 # (c) Shrimadhav U K | gautamajay52
 
 # the logging things
+from tobrot.helper_funcs.upload_to_tg import upload_to_tg
+from tobrot.helper_funcs.download_aria_p_n import aria_start
+from tobrot.helper_funcs.admin_check import AdminCheck
+from tobrot import (
+    MAX_MESSAGE_LENGTH
+)
+import time
+import os
+import asyncio
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -10,22 +19,6 @@ logging.basicConfig(
 )
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
-
-import asyncio
-import os
-import time
-import sys
-import traceback
-import io
-
-from tobrot import (
-    MAX_MESSAGE_LENGTH
-)
-
-
-from tobrot.helper_funcs.admin_check import AdminCheck
-from tobrot.helper_funcs.download_aria_p_n import call_apropriate_function, aria_start
-from tobrot.helper_funcs.upload_to_tg import upload_to_tg
 
 
 async def status_message_f(client, message):
@@ -44,7 +37,7 @@ async def status_message_f(client, message):
         downloading_dir_name = "NA"
         try:
             downloading_dir_name = str(download.name)
-        except:
+        except BaseException:
             pass
         total_length_size = str(download.total_length_string())
         progress_percent_string = str(download.progress_string())
@@ -76,6 +69,7 @@ async def status_message_f(client, message):
         msg = "🤷‍♂️ No Active, Queued or Paused TORRENTs"
     await message.reply_text(msg, quote=True)
 
+
 async def cancel_message_f(client, message):
     if len(message.command) > 1:
         # /cancel command
@@ -97,10 +91,10 @@ async def cancel_message_f(client, message):
     else:
         await message.delete()
 
+
 async def exec_message_f(client, message):
     if not await AdminCheck(client, message.chat.id, message.from_user.id):
         return
-    DELAY_BETWEEN_EDITS = 0.3
     PROCESS_RUN_TIME = 100
     cmd = message.text.split(" ", maxsplit=1)[1]
 
@@ -108,7 +102,7 @@ async def exec_message_f(client, message):
     if message.reply_to_message:
         reply_to_id = message.reply_to_message.message_id
 
-    start_time = time.time() + PROCESS_RUN_TIME
+    time.time() + PROCESS_RUN_TIME
     process = await asyncio.create_subprocess_shell(
         cmd,
         stdout=asyncio.subprocess.PIPE,

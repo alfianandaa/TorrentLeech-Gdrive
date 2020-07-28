@@ -3,6 +3,13 @@
 # (c) Shrimadhav U K
 
 # the logging things
+from tobrot import (
+    DEF_THUMB_NAIL_VID_S
+)
+import pyrogram
+import json
+from tobrot.helper_funcs.display_progress import humanbytes
+import asyncio
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -12,16 +19,7 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
 
-import asyncio
-from tobrot.helper_funcs.display_progress import humanbytes
-import json
-import os
-import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
-
-from tobrot import (
-    DEF_THUMB_NAIL_VID_S
-)
 
 
 async def extract_youtube_dl_formats(url, yt_dl_user_name, yt_dl_pass_word, user_working_dir):
@@ -60,8 +58,8 @@ async def extract_youtube_dl_formats(url, yt_dl_user_name, yt_dl_pass_word, user
     if e_response:
         # logger.warn("Status : FAIL", exc.returncode, exc.output)
         error_message = e_response.replace(
-            "please report this issue on https://yt-dl.org/bug . Make sure you are using the latest version; see  https://yt-dl.org/update  on how to update. Be sure to call youtube-dl with the --verbose flag and include its complete output.", ""
-        )
+            "please report this issue on https://yt-dl.org/bug . Make sure you are using the latest version; see  https://yt-dl.org/update  on how to update. Be sure to call youtube-dl with the --verbose flag and include its complete output.",
+            "")
         return None, error_message, None
     if t_response:
         # logger.info(t_response)
@@ -99,7 +97,8 @@ async def extract_youtube_dl_formats(url, yt_dl_user_name, yt_dl_pass_word, user
                     approx_file_size = ""
                     if "filesize" in formats:
                         approx_file_size = humanbytes(formats["filesize"])
-                    dipslay_str_uon = " " + format_string + " (" + format_ext.upper() + ") " + approx_file_size + " "
+                    dipslay_str_uon = " " + format_string + \
+                        " (" + format_ext.upper() + ") " + approx_file_size + " "
                     cb_string_video = "{}|{}|{}".format(
                         "video", format_id, format_ext)
                     ikeyboard = []
@@ -137,10 +136,8 @@ async def extract_youtube_dl_formats(url, yt_dl_user_name, yt_dl_pass_word, user
                         pyrogram.InlineKeyboardButton(
                             "MP3 " + "(" + "128 kbps" + ")", callback_data=cb_string_128.encode("UTF-8"))
                     ])
-                    inline_keyboard.append([
-                        pyrogram.InlineKeyboardButton(
-                            "MP3 " + "(" + "320 kbps" + ")", callback_data=cb_string.encode("UTF-8"))
-                    ])
+                    inline_keyboard.append([pyrogram.InlineKeyboardButton(
+                        "MP3 " + "(" + "320 kbps" + ")", callback_data=cb_string.encode("UTF-8"))])
             else:
                 format_id = current_r_json["format_id"]
                 format_ext = current_r_json["ext"]

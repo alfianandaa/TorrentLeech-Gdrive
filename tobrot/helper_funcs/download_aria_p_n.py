@@ -3,6 +3,23 @@
 # (c) Shrimadhav U K | gautamajay52
 
 # the logging things
+from pyrogram import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    Message
+)
+from tobrot import (
+    ARIA_TWO_STARTED_PORT,
+    MAX_TIME_TO_WAIT_FOR_TORRENTS_TO_START,
+    AUTH_CHANNEL,
+    DOWNLOAD_LOCATION,
+    CUSTOM_FILE_NAME
+)
+from tobrot.helper_funcs.create_compressed_archive import create_archive, unzip_me, unrar_me, untar_me
+from tobrot.helper_funcs.upload_to_tg import upload_to_tg, upload_to_gdrive
+import os
+import asyncio
+import aria2p
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -11,25 +28,6 @@ logging.basicConfig(
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
-import aria2p
-import asyncio
-import os
-from tobrot.helper_funcs.upload_to_tg import upload_to_tg, upload_to_gdrive
-from tobrot.helper_funcs.create_compressed_archive import create_archive, unzip_me, unrar_me, untar_me
-from tobrot.helper_funcs.extract_link_from_message import extract_link
-
-from tobrot import (
-    ARIA_TWO_STARTED_PORT,
-    MAX_TIME_TO_WAIT_FOR_TORRENTS_TO_START,
-    AUTH_CHANNEL,
-    DOWNLOAD_LOCATION,
-    CUSTOM_FILE_NAME
-)
-from pyrogram import (
-	InlineKeyboardButton,
-	InlineKeyboardMarkup,
-	Message
-)
 
 async def aria_start():
     aria2_daemon_start_cmd = []
@@ -50,7 +48,8 @@ async def aria_start():
     aria2_daemon_start_cmd.append("--seed-ratio=0.0")
     aria2_daemon_start_cmd.append("--seed-time=1")
     aria2_daemon_start_cmd.append("--split=10")
-    aria2_daemon_start_cmd.append(f"--bt-stop-timeout={MAX_TIME_TO_WAIT_FOR_TORRENTS_TO_START}")
+    aria2_daemon_start_cmd.append(
+        f"--bt-stop-timeout={MAX_TIME_TO_WAIT_FOR_TORRENTS_TO_START}")
     #
     LOGGER.info(aria2_daemon_start_cmd)
     #
@@ -84,14 +83,16 @@ def add_magnet(aria_instance, magnetic_link, c_file_name):
             options=options
         )
     except Exception as e:
-        return False, "**FAILED** \n" + str(e) + " \nPlease do not send SLOW links. Read /help"
+        return False, "**FAILED** \n" + \
+            str(e) + " \nPlease do not send SLOW links. Read /help"
     else:
         return True, "" + download.gid + ""
 
 
 def add_torrent(aria_instance, torrent_file_path):
     if torrent_file_path is None:
-        return False, "**FAILED** \n" + str(e) + " \nsomething wrongings when trying to add <u>TORRENT</u> file"
+        return False, "**FAILED** \n" + \
+            str(e) + " \nsomething wrongings when trying to add <u>TORRENT</u> file"
     if os.path.exists(torrent_file_path):
         # Add Torrent Into Queue
         try:
@@ -102,11 +103,13 @@ def add_torrent(aria_instance, torrent_file_path):
                 position=None
             )
         except Exception as e:
-            return False, "**FAILED** \n" + str(e) + " \nPlease do not send SLOW links. Read /help"
+            return False, "**FAILED** \n" + \
+                str(e) + " \nPlease do not send SLOW links. Read /help"
         else:
             return True, "" + download.gid + ""
     else:
-        return False, "**FAILED** \n" + str(e) + " \nPlease try other sources to get workable link"
+        return False, "**FAILED** \n" + \
+            str(e) + " \nPlease try other sources to get workable link"
 
 
 def add_url(aria_instance, text_url, c_file_name):
@@ -123,7 +126,8 @@ def add_url(aria_instance, text_url, c_file_name):
             options=options
         )
     except Exception as e:
-        return False, "**FAILED** \n" + str(e) + " \nPlease do not send SLOW links. Read /help"
+        return False, "**FAILED** \n" + \
+            str(e) + " \nPlease do not send SLOW links. Read /help"
     else:
         return True, "" + download.gid + ""
 
@@ -141,11 +145,13 @@ async def call_apropriate_function(
     user_message
 ):
     if incoming_link.lower().startswith("magnet:"):
-        sagtus, err_message = add_magnet(aria_instance, incoming_link, c_file_name)
+        sagtus, err_message = add_magnet(
+            aria_instance, incoming_link, c_file_name)
     elif incoming_link.lower().endswith(".torrent"):
         sagtus, err_message = add_torrent(aria_instance, incoming_link)
     else:
-        sagtus, err_message = add_url(aria_instance, incoming_link, c_file_name)
+        sagtus, err_message = add_url(
+            aria_instance, incoming_link, c_file_name)
     if not sagtus:
         return sagtus, err_message
     LOGGER.info(err_message)
@@ -245,10 +251,11 @@ async def call_apropriate_function(
             quote=True,
             disable_web_page_preview=True
         )
-    except:
+    except BaseException:
         pass
     return True, None
 #
+
 
 async def call_apropriate_function_g(
     aria_instance,
@@ -263,11 +270,13 @@ async def call_apropriate_function_g(
     user_message
 ):
     if incoming_link.lower().startswith("magnet:"):
-        sagtus, err_message = add_magnet(aria_instance, incoming_link, c_file_name)
+        sagtus, err_message = add_magnet(
+            aria_instance, incoming_link, c_file_name)
     elif incoming_link.lower().endswith(".torrent"):
         sagtus, err_message = add_torrent(aria_instance, incoming_link)
     else:
-        sagtus, err_message = add_url(aria_instance, incoming_link, c_file_name)
+        sagtus, err_message = add_url(
+            aria_instance, incoming_link, c_file_name)
     if not sagtus:
         return sagtus, err_message
     LOGGER.info(err_message)
@@ -339,10 +348,12 @@ async def call_apropriate_function_g(
     final_response = await upload_to_gdrive(
         to_upload_file,
         sent_message_to_update_tg_p,
-        user_message, 
+        user_message,
         user_id
     )
 #
+
+
 async def call_apropriate_function_t(
     to_upload_file_g,
     sent_message_to_update_tg_p,
@@ -369,26 +380,26 @@ async def call_apropriate_function_t(
     #
     response = {}
     LOGGER.info(response)
-    user_id = sent_message_to_update_tg_p.reply_to_message.from_user.id
+    sent_message_to_update_tg_p.reply_to_message.from_user.id
     final_response = await upload_to_gdrive(
         to_upload_file,
         sent_message_to_update_tg_p
     )
     LOGGER.info(final_response)
-    #if to_upload_file:
-        #if CUSTOM_FILE_NAME:
-            #os.rename(to_upload_file, f"{CUSTOM_FILE_NAME}{to_upload_file}")
-            #to_upload_file = f"{CUSTOM_FILE_NAME}{to_upload_file}"
-        #else:
-            #to_upload_file = to_upload_file
+    # if to_upload_file:
+    # if CUSTOM_FILE_NAME:
+    #os.rename(to_upload_file, f"{CUSTOM_FILE_NAME}{to_upload_file}")
+    #to_upload_file = f"{CUSTOM_FILE_NAME}{to_upload_file}"
+    # else:
+    #to_upload_file = to_upload_file
 
-    #if cstom_file_name:
-        #os.rename(to_upload_file, cstom_file_name)
-        #to_upload_file = cstom_file_name
-    #else:
-        #to_upload_file = to_upload_file
+    # if cstom_file_name:
+    #os.rename(to_upload_file, cstom_file_name)
+    #to_upload_file = cstom_file_name
+    # else:
+    #to_upload_file = to_upload_file
     '''
-    
+
     LOGGER.info(final_response)
     message_to_send = ""
     for key_f_res_se in final_response:
@@ -434,23 +445,26 @@ async def check_progress_for_dl(aria2, gid, event, previous_message):
                     # another derp -_-
                     # https://t.me/c/1220993104/423318
                     downloading_dir_name = str(file.name)
-                except:
+                except BaseException:
                     pass
                 #
                 msg = f"\n`{downloading_dir_name}` - Downloading"
                 msg += f"\nSize: {file.total_length_string()}"
                 msg += f"\nProgress: {file.progress_string()} at {file.download_speed_string()}"
 
-                if is_file is None :
-                   msg += f"\nETA: {file.eta_string()} | P : {file.connections}"
-                else :
-                   msg += f"\nETA: {file.eta_string()} | P : {file.connections} | S : {file.num_seeders}"
-                
+                if is_file is None:
+                    msg += f"\nETA: {file.eta_string()} | P : {file.connections}"
+                else:
+                    msg += f"\nETA: {file.eta_string()} | P : {file.connections} | S : {file.num_seeders}"
+
                 # msg += f"\nStatus: {file.status}"
                 msg += f"\nETA: {file.eta_string()}"
                 inline_keyboard = []
                 ikeyboard = []
-                ikeyboard.append(InlineKeyboardButton("Cancel 🚫", callback_data=(f"cancel {gid}").encode("UTF-8")))
+                ikeyboard.append(
+                    InlineKeyboardButton(
+                        "Cancel 🚫",
+                        callback_data=(f"cancel {gid}").encode("UTF-8")))
                 inline_keyboard.append(ikeyboard)
                 reply_markup = InlineKeyboardMarkup(inline_keyboard)
                 #msg += reply_markup

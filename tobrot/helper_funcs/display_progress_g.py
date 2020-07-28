@@ -3,19 +3,17 @@
 # (c) Shrimadhav U K
 
 # the logging things
-import logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-import math
-import os
-import time
-
 from tobrot import (
     FINISHED_PROGRESS_STR,
     UN_FINISHED_PROGRESS_STR,
 )
+import time
+import math
+import logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 async def progress_for_pyrogram_g(
@@ -37,7 +35,8 @@ async def progress_for_pyrogram_g(
         estimated_total_time = elapsed_time + time_to_completion
 
         elapsed_time = time_formatter(milliseconds=elapsed_time)
-        estimated_total_time = time_formatter(milliseconds=estimated_total_time)
+        estimated_total_time = time_formatter(
+            milliseconds=estimated_total_time)
 
         progress = "[{0}{1}] \nP: {2}%\n".format(
             ''.join([FINISHED_PROGRESS_STR for i in range(math.floor(percentage / 5))]),
@@ -58,7 +57,7 @@ async def progress_for_pyrogram_g(
                     tmp
                 )
             )
-        except:
+        except BaseException:
             pass
 
 

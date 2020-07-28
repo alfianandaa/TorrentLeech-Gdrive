@@ -29,7 +29,8 @@ async def save_thumb_nail(client, message):
             file_name=download_location
         )
         # https://stackoverflow.com/a/21669827/4723940
-        Image.open(downloaded_file_name).convert("RGB").save(downloaded_file_name)
+        Image.open(downloaded_file_name).convert(
+            "RGB").save(downloaded_file_name)
         metadata = extractMetadata(createParser(downloaded_file_name))
         height = 0
         if metadata.has("height"):
@@ -44,7 +45,7 @@ async def save_thumb_nail(client, message):
         # https://pillow.readthedocs.io/en/3.1.x/reference/Image.html#create-thumbnails
         os.remove(downloaded_file_name)
         await ismgs.edit(
-            "Custom video / file thumbnail saved. " + \
+            "Custom video / file thumbnail saved. " +
             "This image will be used in the upload, till /clearthumbnail."
         )
     else:

@@ -3,6 +3,10 @@
 # (c) Shrimadhav U K
 
 # the logging things
+import aiohttp
+from tobrot import (
+    REAL_DEBRID_KEY
+)
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -10,16 +14,6 @@ logging.basicConfig(
 )
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
-
-import os
-
-from tobrot import (
-    REAL_DEBRID_KEY
-)
-
-
-import aiohttp
-import asyncio
 
 
 BASE_URL = "https://api.real-debrid.com/rest/1.0"

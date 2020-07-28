@@ -3,6 +3,32 @@
 # (c) Shrimadhav U K | gautamajay52
 
 # the logging things
+from pyrogram import (
+    InputMediaDocument,
+    InputMediaVideo,
+    InputMediaAudio
+)
+from tobrot import (
+    TG_MAX_FILE_SIZE,
+    DOWNLOAD_LOCATION,
+    DESTINATION_FOLDER,
+    RCLONE_CONFIG,
+    INDEX_LINK
+)
+from tobrot.helper_funcs.copy_similar_file import copy_file
+from tobrot.helper_funcs.split_large_files import split_large_files
+from tobrot.helper_funcs.help_Nekmo_ffmpeg import take_screen_shot
+from tobrot.helper_funcs.display_progress import progress_for_pyrogram, humanbytes
+from PIL import Image
+from hachoir.parser import createParser
+from hachoir.metadata import extractMetadata
+from hurry.filesize import size
+import requests
+import re
+import subprocess
+import time
+import os
+import asyncio
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -11,38 +37,9 @@ logging.basicConfig(
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
-import asyncio
-import os
-import time
-import subprocess
-import re
-import requests
-import shutil
-from hurry.filesize import size
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
-from PIL import Image
-from tobrot.helper_funcs.display_progress import progress_for_pyrogram, humanbytes
-from tobrot.helper_funcs.help_Nekmo_ffmpeg import take_screen_shot
-from tobrot.helper_funcs.split_large_files import split_large_files
-from tobrot.helper_funcs.copy_similar_file import copy_file
-from requests.utils import requote_uri
 
-from tobrot import (
-    TG_MAX_FILE_SIZE,
-    DOWNLOAD_LOCATION,
-    DESTINATION_FOLDER,
-    RCLONE_CONFIG,
-    INDEX_LINK
-)
+# stackoverflow🤐
 
-from pyrogram import (
-    InputMediaDocument,
-    InputMediaVideo,
-    InputMediaAudio
-)
-
-#stackoverflow🤐
 
 def getFolderSize(p):
     from functools import partial
@@ -51,6 +48,7 @@ def getFolderSize(p):
         os.path.getsize(f) if os.path.isfile(f) else getFolderSize(f)
         for f in map(prepend, os.listdir(p))
     )
+
 
 async def upload_to_tg(
     message,
@@ -129,36 +127,55 @@ async def upload_to_tg(
                 edit_media
             )
             if sent_message is not None:
-                dict_contatining_uploaded_files[os.path.basename(local_file_name)] = sent_message.message_id
+                dict_contatining_uploaded_files[os.path.basename(
+                    local_file_name)] = sent_message.message_id
     # await message.delete()
     return dict_contatining_uploaded_files
 #
+
 
 async def upload_to_gdrive(file_upload, message, messa_ge, g_id):
     await asyncio.sleep(5)
     await message.edit_text("Uploading...")
     start_time = int(round(time.time() * 1))
-    subprocess.Popen(('touch', 'rclone.conf'), stdout = subprocess.PIPE)
+    subprocess.Popen(('touch', 'rclone.conf'), stdout=subprocess.PIPE)
     with open('rclone.conf', 'a', newline="\n") as fole:
         fole.write("[DRIVE]\n")
         fole.write(f"{RCLONE_CONFIG}")
     destination = f'{DESTINATION_FOLDER}'
     if os.path.isfile(file_upload):
-        tmp = subprocess.Popen(['rclone', 'copy', '--config=rclone.conf', f'{file_upload}', 'DRIVE:'f'{destination}', '-v'], stdout = subprocess.PIPE)
+        tmp = subprocess.Popen(['rclone',
+                                'copy',
+                                '--config=rclone.conf',
+                                f'{file_upload}',
+                                'DRIVE:'
+                                f'{destination}',
+                                '-v'],
+                               stdout=subprocess.PIPE)
         pro, cess = tmp.communicate()
         gk_file = re.escape(file_upload)
         print(gk_file)
         with open('filter.txt', 'w+') as filter:
             print(f"+ {gk_file}\n- *", file=filter)
-        process1 = subprocess.Popen(['rclone', 'lsf', '--config=rclone.conf', '-F', 'i', "--filter-from=filter.txt", "--files-only", 'DRIVE:'f'{destination}'], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-        #os.remove("filter.txt")
+        process1 = subprocess.Popen(['rclone',
+                                     'lsf',
+                                     '--config=rclone.conf',
+                                     '-F',
+                                     'i',
+                                     "--filter-from=filter.txt",
+                                     "--files-only",
+                                     'DRIVE:'
+                                     f'{destination}'],
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE)
+        # os.remove("filter.txt")
         popi, popp = process1.communicate()
         print(popi)
         p = popi.decode("utf-8")
         print(p)
-        #os.remove("filter.txt")
+        # os.remove("filter.txt")
         gauti = f"https://drive.google.com/file/d/{p}/view?usp=drivesdk"
-        gau_link = re.search("(?P<url>https?://[^\s]+)", gauti).group("url")
+        gau_link = re.search(r"(?P<url>https?://[^\s]+)", gauti).group("url")
         print(gau_link)
         indexurl = f"{INDEX_LINK}/{file_upload}"
         tam_link = requests.utils.requote_uri(indexurl)
@@ -170,24 +187,41 @@ async def upload_to_gdrive(file_upload, message, messa_ge, g_id):
         await message.edit_text(f"""**Uploaded Successfully** __in {m_s}seconds__ \n\n<a href="{tam_link}">📄 {file_upload} </a>({gjay})""")
         os.remove(file_upload)
     else:
-        tt= os.path.join(destination, file_upload)
+        tt = os.path.join(destination, file_upload)
         print(tt)
-        tmp = subprocess.Popen(['rclone', 'copy', '--config=rclone.conf', f'{file_upload}', 'DRIVE:'f'{tt}', '-v'], stdout = subprocess.PIPE)
+        tmp = subprocess.Popen(['rclone',
+                                'copy',
+                                '--config=rclone.conf',
+                                f'{file_upload}',
+                                'DRIVE:'
+                                f'{tt}',
+                                '-v'],
+                               stdout=subprocess.PIPE)
         pro, cess = tmp.communicate()
         print(pro)
         g_file = re.escape(file_upload)
         print(g_file)
         with open('filter1.txt', 'w+') as filter1:
             print(f"+ {g_file}/\n- *", file=filter1)
-        process12 = subprocess.Popen(['rclone', 'lsf', '--config=rclone.conf', '-F', 'i', "--filter-from=filter1.txt", "--dirs-only", 'DRIVE:'f'{destination}'], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-        #os.remove("filter1.txt")
+        process12 = subprocess.Popen(['rclone',
+                                      'lsf',
+                                      '--config=rclone.conf',
+                                      '-F',
+                                      'i',
+                                      "--filter-from=filter1.txt",
+                                      "--dirs-only",
+                                      'DRIVE:'
+                                      f'{destination}'],
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE)
+        # os.remove("filter1.txt")
         popie, popp = process12.communicate()
         print(popie)
         p = popie.decode("utf-8")
         print(p)
-        #os.remove("filter1.txt")
+        # os.remove("filter1.txt")
         gautii = f"https://drive.google.com/folderview?id={p}"
-        gau_link = re.search("(?P<url>https?://[^\s]+)", gautii).group("url")
+        gau_link = re.search(r"(?P<url>https?://[^\s]+)", gautii).group("url")
         print(gau_link)
         indexurl = f"{INDEX_LINK}/{file_upload}/"
         tam_link = requests.utils.requote_uri(indexurl)
@@ -238,7 +272,8 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     os.path.dirname(os.path.abspath(local_file_name)),
                     (duration / 2)
                 )
-                # get the correct width, height, and duration for videos greater than 10MB
+                # get the correct width, height, and duration for videos
+                # greater than 10MB
                 if os.path.exists(thumb_image_path):
                     metadata = extractMetadata(createParser(thumb_image_path))
                     if metadata.has("width"):
@@ -258,7 +293,8 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     # https://pillow.readthedocs.io/en/3.1.x/reference/Image.html#create-thumbnails
             #
             thumb = None
-            if thumb_image_path is not None and os.path.isfile(thumb_image_path):
+            if thumb_image_path is not None and os.path.isfile(
+                    thumb_image_path):
                 thumb = thumb_image_path
             # send video
             if edit_media and message.photo:
@@ -287,7 +323,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     thumb=thumb,
                     supports_streaming=True,
                     disable_notification=True,
-                    #reply_to_message_id=message.reply_to_message.message_id,
+                    # reply_to_message_id=message.reply_to_message.message_id,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         "trying to upload",
@@ -313,7 +349,8 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     os.path.dirname(os.path.abspath(local_file_name))
                 )
             thumb = None
-            if thumb_image_path is not None and os.path.isfile(thumb_image_path):
+            if thumb_image_path is not None and os.path.isfile(
+                    thumb_image_path):
                 thumb = thumb_image_path
             # send audio
             if edit_media and message.photo:
@@ -340,7 +377,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     title=title,
                     thumb=thumb,
                     disable_notification=True,
-                    #reply_to_message_id=message.reply_to_message.message_id,
+                    # reply_to_message_id=message.reply_to_message.message_id,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         "trying to upload",
@@ -358,7 +395,8 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
             # if a file, don't upload "thumb"
             # this "diff" is a major derp -_- 😔😭😭
             thumb = None
-            if thumb_image_path is not None and os.path.isfile(thumb_image_path):
+            if thumb_image_path is not None and os.path.isfile(
+                    thumb_image_path):
                 thumb = thumb_image_path
             #
             # send document
@@ -380,7 +418,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     caption=caption_str,
                     parse_mode="html",
                     disable_notification=True,
-                    #reply_to_message_id=message.reply_to_message.message_id,
+                    # reply_to_message_id=message.reply_to_message.message_id,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         "trying to upload",

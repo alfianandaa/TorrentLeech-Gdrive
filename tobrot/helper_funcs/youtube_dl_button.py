@@ -3,29 +3,25 @@
 # (c) Shrimadhav U K
 
 # the logging things
-import logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-LOGGER = logging.getLogger(__name__)
-
-import asyncio
-import json
-import math
-import os
-import shutil
-import time
-import subprocess
-from datetime import datetime
-
+from tobrot.helper_funcs.upload_to_tg import upload_to_tg, upload_to_gdrive
 from tobrot import (
     DOWNLOAD_LOCATION,
     AUTH_CHANNEL
 )
+from datetime import datetime
+import subprocess
+import shutil
+import os
+import json
+import asyncio
+import logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+LOGGER = logging.getLogger(__name__)
 
-import pyrogram
+
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
-
-from tobrot.helper_funcs.upload_to_tg import upload_to_tg, upload_to_gdrive
 
 
 async def youtube_dl_call_back(bot, update):
@@ -63,7 +59,7 @@ async def youtube_dl_call_back(bot, update):
         with open(save_ytdl_json_path, "r", encoding="utf8") as f:
             response_json = json.load(f)
         os.remove(save_ytdl_json_path)
-    except (FileNotFoundError) as e:
+    except (FileNotFoundError):
         await bot.delete_messages(
             chat_id=update.message.chat.id,
             message_ids=[
@@ -100,7 +96,8 @@ async def youtube_dl_call_back(bot, update):
     if not os.path.isdir(tmp_directory_for_each_user):
         os.makedirs(tmp_directory_for_each_user)
     download_directory = tmp_directory_for_each_user
-    download_directory = os.path.join(tmp_directory_for_each_user, custom_file_name)
+    download_directory = os.path.join(
+        tmp_directory_for_each_user, custom_file_name)
     command_to_exec = []
     if tg_send_type == "audio":
         command_to_exec = [
@@ -168,7 +165,7 @@ async def youtube_dl_call_back(bot, update):
         # LOGGER.info(t_response)
         # os.remove(save_ytdl_json_path)
         end_one = datetime.now()
-        time_taken_for_download = (end_one -start).seconds
+        (end_one - start).seconds
         dir_contents = len(os.listdir(tmp_directory_for_each_user))
         # dir_contents.sort()
         await update.message.edit_caption(
@@ -185,7 +182,8 @@ async def youtube_dl_call_back(bot, update):
                     print(e)
                     gaut_am = os.path.basename(e)
                     print(gaut_am)
-                    liop = subprocess.Popen(["mv", f'{e}', "/app/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    liop = subprocess.Popen(
+                        ["mv", f'{e}', "/app/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                     o, e = liop.communicate()
                     print(o)
                     print(e)
@@ -203,8 +201,8 @@ async def youtube_dl_call_back(bot, update):
                 {},
                 True
             )
-          
-        '''  
+
+        '''
         final_response = await upload_to_tg(
             update.message,
             tmp_directory_for_each_user,
@@ -218,6 +216,6 @@ async def youtube_dl_call_back(bot, update):
         try:
             shutil.rmtree(tmp_directory_for_each_user)
             os.remove('blame_my_knowledge.txt')
-        except:
+        except BaseException:
             pass
         #

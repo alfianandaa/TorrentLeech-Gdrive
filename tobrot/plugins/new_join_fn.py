@@ -3,6 +3,10 @@
 # (c) Shrimadhav U K
 
 # the logging things
+from tobrot import (
+    AUTH_CHANNEL,
+    INDEX_LINK
+)
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -10,14 +14,6 @@ logging.basicConfig(
 )
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
-
-import pyrogram
-
-
-from tobrot import (
-    AUTH_CHANNEL,
-    INDEX_LINK
-)
 
 
 async def new_join_f(client, message):
@@ -38,11 +34,10 @@ async def help_message_f(client, message):
     #channel_id = str(AUTH_CHANNEL)[4:]
     #message_id = 99
     # display the /help
-    
+
     await message.reply_text("""Hello This is a bot which can mirror all your links to Google drive!
 Type /help to get a list of available commands
 """)
-
 
 
 async def rename_message_f(client, message):

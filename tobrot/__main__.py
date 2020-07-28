@@ -3,6 +3,34 @@
 # (c) Shrimadhav U K | gautamajay52
 
 # the logging things
+from tobrot.helper_funcs.download import down_load_media_f
+from tobrot.plugins.custom_thumbnail import (
+    save_thumb_nail,
+    clear_thumb_nail
+)
+from tobrot.plugins.call_back_button_handler import button
+from tobrot.plugins.status_message_fn import (
+    status_message_f,
+    cancel_message_f,
+    exec_message_f,
+    upload_document_f
+    # eval_message_f
+)
+from tobrot.plugins.incoming_message_fn import incoming_message_f, incoming_youtube_dl_f, incoming_purge_message_f, incoming_gdrive_message_f
+from tobrot.plugins.help_bot import help_bot_message
+from tobrot.plugins.stats import check_size_g
+from tobrot.plugins.stats import ping_bot_g
+from tobrot.plugins.stats import stats_bot_g
+from tobrot.plugins.new_join_fn import new_join_f, help_message_f, rename_message_f
+from pyrogram import Client, Filters, MessageHandler, CallbackQueryHandler
+from tobrot import (
+    DOWNLOAD_LOCATION,
+    TG_BOT_TOKEN,
+    APP_ID,
+    API_HASH,
+    AUTH_CHANNEL,
+)
+import os
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -12,43 +40,8 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
-import os
-import io
-import sys
-import traceback
 
-from tobrot import (
-    DOWNLOAD_LOCATION,
-    TG_BOT_TOKEN,
-    APP_ID,
-    API_HASH,
-    AUTH_CHANNEL,
-)
-
-from pyrogram import Client, Filters, MessageHandler, CallbackQueryHandler
-
-from tobrot.plugins.new_join_fn import new_join_f, help_message_f, rename_message_f
-from tobrot.plugins.stats import stats_bot_g
-from tobrot.plugins.stats import ping_bot_g
-from tobrot.plugins.stats import check_size_g
-from tobrot.plugins.help_bot import help_bot_message
-from tobrot.plugins.incoming_message_fn import incoming_message_f, incoming_youtube_dl_f, incoming_purge_message_f, incoming_gdrive_message_f
-from tobrot.plugins.status_message_fn import (
-    status_message_f,
-    cancel_message_f,
-    exec_message_f,
-    upload_document_f
-    #eval_message_f
-)
-from tobrot.plugins.call_back_button_handler import button
-from tobrot.plugins.custom_thumbnail import (
-    save_thumb_nail,
-    clear_thumb_nail
-)
-from tobrot.helper_funcs.download import down_load_media_f
-
-
-if __name__ == "__main__" :
+if __name__ == "__main__":
     # create download directory, if not exist
     if not os.path.isdir(DOWNLOAD_LOCATION):
         os.makedirs(DOWNLOAD_LOCATION)
@@ -62,9 +55,9 @@ if __name__ == "__main__" :
     )
     #
     incoming_message_handler = MessageHandler(
-        incoming_message_f,
-        filters=Filters.command([f"mirrorup"]) & Filters.chat(chats=AUTH_CHANNEL)
-    )
+        incoming_message_f, filters=Filters.command(
+            [f"mirrorup"]) & Filters.chat(
+            chats=AUTH_CHANNEL))
     app.add_handler(incoming_message_handler)
     #
     incoming_gdrive_message_handler = MessageHandler(
@@ -74,9 +67,9 @@ if __name__ == "__main__" :
     app.add_handler(incoming_gdrive_message_handler)
     #
     incoming_telegram_download_handler = MessageHandler(
-        down_load_media_f,
-        filters=Filters.command([f"tmirror"]) & Filters.chat(chats=AUTH_CHANNEL)
-    )
+        down_load_media_f, filters=Filters.command(
+            [f"tmirror"]) & Filters.chat(
+            chats=AUTH_CHANNEL))
     app.add_handler(incoming_telegram_download_handler)
     #
     incoming_purge_message_handler = MessageHandler(
@@ -171,15 +164,15 @@ if __name__ == "__main__" :
     app.add_handler(call_back_button_handler)
     #
     save_thumb_nail_handler = MessageHandler(
-        save_thumb_nail,
-        filters=Filters.command(["savethumbnail"]) & Filters.chat(chats=AUTH_CHANNEL)
-    )
+        save_thumb_nail, filters=Filters.command(
+            ["savethumbnail"]) & Filters.chat(
+            chats=AUTH_CHANNEL))
     app.add_handler(save_thumb_nail_handler)
     #
     clear_thumb_nail_handler = MessageHandler(
-        clear_thumb_nail,
-        filters=Filters.command(["clearthumbnail"]) & Filters.chat(chats=AUTH_CHANNEL)
-    )
+        clear_thumb_nail, filters=Filters.command(
+            ["clearthumbnail"]) & Filters.chat(
+            chats=AUTH_CHANNEL))
     app.add_handler(clear_thumb_nail_handler)
     #
     app.run()
