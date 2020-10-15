@@ -1,4 +1,4 @@
-# for support join here [TorrentLeech-Gdrive](https://telegram.dog/torrentleechgdrivesupport)
+# To Suport please consider to join here [TorrentLeech-Gdrive](https://telegram.dog/torrentleechgdrivesupport) @torrentleechgdrivesupport
 # working example group [Leech Here](https://telegram.dog/torrentleechgdrive)
 
 # Original Repo
@@ -16,13 +16,13 @@ A Telegram Torrent (and youtube-dl) Leecher based on [Pyrogram](https://github.c
     ✓ Untar
     ✓ Custom file name
     ✓ Custom commands
-    ✓ 
+    ✓ Safe bot
 
 ### Credit goes to SpEcHiDe for his Publicleech repo.
 
-## installing
+## Installing.......
 
-### The Easy Way
+### The Easy Way(Best)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
